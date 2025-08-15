@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Linn.Common.Service.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="6.10.0" />
+		<PackageReference Include="Linn.Common.Facade" Version="13.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+		<PackageReference Include="NSubstitute" Version="5.0.0" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+	</ItemGroup>
+
+</Project>

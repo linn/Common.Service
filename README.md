@@ -1,0 +1,2 @@
+# Package Description
+.NET utilities for consistent API and service responses. Provides standard result types (e.g., SuccessResult, BadRequestResult, NotFoundResult) and helpers for generating HTTP responses with correct status codes and serialized content.

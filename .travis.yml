@@ -1,0 +1,10 @@
+language: csharp
+dist: focal
+sudo: required
+mono: none
+dotnet: 9.0
+before_script: 
+- chmod +x *.sh
+- dotnet restore
+- ./test.sh
+script: ./publish.sh
