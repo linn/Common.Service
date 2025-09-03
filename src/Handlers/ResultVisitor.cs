@@ -36,12 +36,26 @@ namespace Linn.Common.Service.Handlers
 
         public ResponseAction Visit(UnauthorisedResult<T> result)
         {
-            return (res, cancellationToken) =>
+            return async (res, cancellationToken) =>
             {
                 res.StatusCode = 401;
                 res.ContentType = this.contentType;
+                string payload;
 
-                return Task.CompletedTask;
+                if (result.Message != null)
+                {
+                    payload = this.serialiser.Serialize(result.Message);
+                }
+                else if (result.Body != null)
+                {
+                    payload = this.serialiser.Serialize(result.Body);
+                }
+                else
+                {
+                    payload = string.Empty;
+                }
+
+                await res.WriteAsync(payload, cancellationToken);
             };
         }
 
