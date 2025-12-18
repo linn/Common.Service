@@ -11,7 +11,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Net.Http.Headers;
 
-    public static class ResponseExtensions
+    public static class HttpResponseExtensions
     {
         public static Task Negotiate<T>(
             this HttpResponse response,
@@ -84,6 +84,10 @@
                 }
 
                 source.Seek(rangeStart.Value, SeekOrigin.Begin);
+
+                // assume 200 OK if we got this far
+                response.StatusCode = (int)HttpStatusCode.OK;
+
                 return StreamCopyOperation.CopyToAsync(
                     source,
                     response.Body,
