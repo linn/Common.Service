@@ -96,6 +96,9 @@
                     response.HttpContext.RequestAborted);
             }
 
+            // assume 200 OK if we got this far
+            response.StatusCode = (int)HttpStatusCode.OK;
+
             return StreamCopyOperation.CopyToAsync(
                 source, response.Body, default, 65536, response.HttpContext.RequestAborted);
         }
