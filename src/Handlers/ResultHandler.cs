@@ -22,24 +22,28 @@ namespace Linn.Common.Service.Handlers
 
         public abstract Func<T, string> GenerateLocation { get; }
 
-        // TODO Replace requestedContentType with array of content types
         public bool CanHandle(object model, string requestedContentType)
         {
-            return model is IResult<T> 
+            return model is IResult<T>
                    && requestedContentType.IndexOf(
-                       this.contentType, StringComparison.InvariantCultureIgnoreCase) > -1;
+                       this.contentType,
+                       StringComparison.InvariantCultureIgnoreCase) > -1;
         }
 
         public async Task Handle(
-            HttpRequest req, HttpResponse res, object model, CancellationToken cancellationToken)
+            HttpRequest req,
+            HttpResponse res,
+            object model,
+            CancellationToken cancellationToken)
         {
             var result = (IResult<T>)model;
 
-            var visitor = new ResultVisitor<T>(this.contentType, this.serialiser, this.GenerateLocation);
+            var writer = new ResultResponseWriter<T>(
+                this.contentType,
+                this.serialiser,
+                this.GenerateLocation);
 
-            var action = result.Accept(visitor);
-
-            await action(res, cancellationToken);
+            await writer.WriteAsync(res, result, cancellationToken);
         }
     }
 }

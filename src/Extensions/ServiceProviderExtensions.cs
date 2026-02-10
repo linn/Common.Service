@@ -9,7 +9,7 @@
 
     public static class ServiceProviderExtensions
     {
-        public static IHandler GetHandler(
+        public static IHandler? GetHandler(
             this IServiceProvider serviceProvider, 
             object model, 
             string contentType)
