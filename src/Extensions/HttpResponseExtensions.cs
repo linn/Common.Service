@@ -1,10 +1,14 @@
 ﻿namespace Linn.Common.Service.Extensions
 {
+    using System;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using Linn.Common.Service;
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Extensions;
@@ -18,8 +22,8 @@
             T model,
             CancellationToken cancellationToken = default)
         {
-            var negotiators = response.HttpContext.RequestServices.GetServices<IResponseNegotiator>().ToList();
-            IResponseNegotiator negotiator = null;
+            List<IResponseNegotiator> negotiators = response.HttpContext.RequestServices.GetServices<IResponseNegotiator>().ToList();
+            IResponseNegotiator? negotiator = null;
 
             MediaTypeHeaderValue.TryParseList(response.HttpContext.Request.Headers["Accept"], out var accept);
             if (accept != null)
@@ -50,7 +54,7 @@
             this HttpResponse response,
             Stream source,
             string contentType,
-            ContentDisposition contentDisposition = null)
+            ContentDisposition? contentDisposition = null)
         {
             var contentLength = source.Length;
 

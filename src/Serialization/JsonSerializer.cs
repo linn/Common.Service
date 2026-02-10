@@ -5,7 +5,7 @@
 
     public class JsonSerializer : ISerializer
     {
-        private readonly JsonSerializerSettings jsonSettings;
+        private readonly JsonSerializerSettings? jsonSettings;
 
         public JsonSerializer()
         {
@@ -22,7 +22,7 @@
             return JsonConvert.SerializeObject(model, this.jsonSettings);
         }
 
-        public T Deserialize<T>(string body)
+        public T? Deserialize<T>(string body)
         {
             return JsonConvert.DeserializeObject<T>(body, this.jsonSettings);
         }

@@ -49,7 +49,7 @@
             return sw.ToString();
         }
 
-        public T Deserialize<T>(string body)
+        public T? Deserialize<T>(string body)
         {
             throw new NotImplementedException();
         }
