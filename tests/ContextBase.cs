@@ -30,7 +30,7 @@
                         s.AddSingleton<WidgetResourceBuilder>();
                         s.AddTransient<UniversalResponseNegotiator>();
                         s.AddSingleton<IHandler, JsonResultHandler<WidgetResource>>();
-                        s.AddSingleton<IHandler, CsvSerializingResultHandler<WidgetResource>>();
+                        s.AddSingleton<IHandler, CsvResultHandler<WidgetResource>>();
                         s.AddSingleton(this.WidgetService);
                     },
                 FakeAuthMiddleware.EmployeeMiddleware);
