@@ -9,15 +9,15 @@ namespace Linn.Common.Service.Handlers
 
     using Microsoft.AspNetCore.Http;
 
-    public abstract class ResultHandler<T> : IHandler
+    public abstract class SerializingResultHandler<T> : IHandler
     {
         private readonly string contentType;
-        private readonly ISerializer serialiser;
+        private readonly ISerializer serializer;
 
-        protected ResultHandler(string contentType, ISerializer serialiser)
+        protected SerializingResultHandler(string contentType, ISerializer serializer)
         {
             this.contentType = contentType;
-            this.serialiser = serialiser;
+            this.serializer = serializer;
         }
 
         public abstract Func<T, string> GenerateLocation { get; }
@@ -40,7 +40,7 @@ namespace Linn.Common.Service.Handlers
 
             var writer = new ResultResponseWriter<T>(
                 this.contentType,
-                this.serialiser,
+                this.serializer,
                 this.GenerateLocation);
 
             await writer.WriteAsync(res, result, cancellationToken);

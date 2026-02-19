@@ -4,7 +4,7 @@ namespace Linn.Common.Service.Handlers
 
     using Linn.Common.Service.Serialization;
 
-    public class JsonResultHandler<T> : ResultHandler<T>
+    public class JsonResultHandler<T> : SerializingResultHandler<T>
     {
         public JsonResultHandler() : base("application/json", new JsonSerializer())
         {
