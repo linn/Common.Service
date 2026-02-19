@@ -4,7 +4,7 @@
 
     using Linn.Common.Service.Serialization;
 
-    public class CsvResultHandler<T> : ResultHandler<T>
+    public class CsvResultHandler<T> : SerializingResultHandler<T>
     {
         public CsvResultHandler() : base("text/csv", new CsvSerializer())
         {

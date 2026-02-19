@@ -12,16 +12,16 @@
     internal sealed class ResultResponseWriter<T>
     {
         private readonly string contentType;
-        private readonly ISerializer serialiser;
+        private readonly ISerializer serializer;
         private readonly Func<T, string> locationBuilder;
 
         public ResultResponseWriter(
             string contentType,
-            ISerializer serialiser,
+            ISerializer serializer,
             Func<T, string> locationBuilder = null)
         {
             this.contentType = contentType;
-            this.serialiser = serialiser;
+            this.serializer = serializer;
             this.locationBuilder = locationBuilder;
         }
 
@@ -37,7 +37,7 @@
                 case SuccessResult<T> r:
                     res.StatusCode = 200;
                     await res.WriteAsync(
-                        this.serialiser.Serialize(r.Data),
+                        this.serializer.Serialize(r.Data),
                         cancellationToken);
                     break;
 
@@ -59,7 +59,7 @@
                             this.locationBuilder(r.Data);
 
                     await res.WriteAsync(
-                        this.serialiser.Serialize(r.Data ?? new object()),
+                        this.serializer.Serialize(r.Data ?? new object()),
                         cancellationToken);
                     break;
 
@@ -84,12 +84,12 @@
         {
             if (a != null)
             {
-                return this.serialiser.Serialize(a);
+                return this.serializer.Serialize(a);
             }
 
             if (b != null)
             {
-                return this.serialiser.Serialize(b);
+                return this.serializer.Serialize(b);
             }
 
             return string.Empty;
