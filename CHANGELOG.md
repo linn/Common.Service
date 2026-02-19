@@ -1,7 +1,7 @@
 # Changelog
 ## [2.0.0] - 2026-02-19
 ### Changes
-- Added new StreamCopyingResultHandler, which will be invoked on IResult<StreamResponse> types during content negotiiation and subsequent response writing.
+- Added new StreamCopyingResultHandler, which will be invoked on IResult<StreamResponse> types during content negotiation and subsequent response writing.
   The purpose of this is that, so long as facade service methods or similar return an IResult<StreamResponse> result, the service code can just call response.Negotiate(result) in the same way that it does for any other IResult types.
   And then content negotiation will do the rest, i.e. set the response status code and headers, and copy the stream of data to the response body.
 - Renamed ResultHandler to SerializingResultHanlder for clarity since the previous name implied that it might be suitable for more general cases where serializing is not required.
