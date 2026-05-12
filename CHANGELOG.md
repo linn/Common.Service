@@ -1,4 +1,12 @@
 # Changelog
+## [3.0.0] - 2026-05-12
+### Changes
+- Updated to .NET 10
+- Added a new lazy overload of Negotiate that takes a Func<Task<T>> instead of an already-evaluated model. This allows endpoints that serve both the SPA shell and API data to avoid fetching data unnecessarily for HTML requests - the delegate is only invoked when the client actually wants JSON/CSV/etc.
+- Moved HtmlNegotiator into this library so consuming projects no longer need to duplicate it. Includes IViewLoader, ViewLoader, and the common models (ApplicationSettings, ViewModel, ViewResponse).
+- ApplicationSettings now uses a dictionary-based approach. Consumers can override defaults or add extra keys via HtmlNegotiatorOptions at registration time.
+- The lazy Negotiate overload resolves the negotiator explicitly rather than relying on DI registration order, fixing a subtle bug where UniversalResponseNegotiator (CanHandle always returns true) could intercept HTML requests if registered before HtmlNegotiator.
+- Migrated CI/CD from Travis CI to GitHub Actions.
 ## [2.0.0] - 2026-02-19
 ### Changes
 - Added new StreamCopyingResultHandler, which will be invoked on IResult<StreamResponse> types during content negotiation and subsequent response writing.
