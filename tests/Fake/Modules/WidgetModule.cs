@@ -15,6 +15,7 @@ namespace Linn.Common.Service.Tests.Fake.Modules
         public void MapEndpoints(IEndpointRouteBuilder app)
         {
             app.MapGet("/widgets/{id:int}", this.GetWidget);
+            app.MapGet("/widgets/{id:int}/lazy", this.GetWidgetLazy);
             app.MapPost("/widgets", this.PostWidget);
         }
 
@@ -24,6 +25,12 @@ namespace Linn.Common.Service.Tests.Fake.Modules
             var result = widgetService.GetWidget(id);
 
             await res.Negotiate(result);
+        }
+
+        private async Task GetWidgetLazy(
+            HttpRequest req, HttpResponse res, int id, IWidgetService widgetService)
+        {
+            await res.Negotiate(() => Task.FromResult(widgetService.GetWidget(id)));
         }
 
         private async Task PostWidget(HttpRequest req, HttpResponse res, WidgetResource resource, IWidgetService widgetService)
