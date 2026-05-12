@@ -22,10 +22,41 @@
             T model,
             CancellationToken cancellationToken = default)
         {
-            List<IResponseNegotiator> negotiators = response.HttpContext.RequestServices.GetServices<IResponseNegotiator>().ToList();
+            var negotiator = ResolveNegotiator(response);
+
+            return negotiator.Handle(
+                response.HttpContext.Request, response, model, cancellationToken);
+        }
+
+        public static async Task Negotiate<T>(
+            this HttpResponse response,
+            Func<Task<T>> dataFunc,
+            CancellationToken cancellationToken = default)
+        {
+            var negotiator = ResolveNegotiator(response);
+
+            if (negotiator is HtmlNegotiator)
+            {
+                await negotiator.Handle(
+                    response.HttpContext.Request, response, null, cancellationToken);
+                return;
+            }
+
+            var model = await dataFunc();
+            await negotiator.Handle(
+                response.HttpContext.Request, response, model, cancellationToken);
+        }
+
+        private static IResponseNegotiator ResolveNegotiator(HttpResponse response)
+        {
+            var negotiators = response.HttpContext.RequestServices
+                .GetServices<IResponseNegotiator>().ToList();
+
             IResponseNegotiator? negotiator = null;
 
-            MediaTypeHeaderValue.TryParseList(response.HttpContext.Request.Headers["Accept"], out var accept);
+            MediaTypeHeaderValue.TryParseList(
+                response.HttpContext.Request.Headers["Accept"], out var accept);
+
             if (accept != null)
             {
                 var ordered = accept.OrderByDescending(x => x.Quality ?? 1);
@@ -46,8 +77,7 @@
                     x => x.CanHandle(new MediaTypeHeaderValue("application/json")));
             }
 
-            return negotiator.Handle(
-                response.HttpContext.Request, response, model, cancellationToken);
+            return negotiator;
         }
 
         public static Task FromStream(
