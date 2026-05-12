@@ -20,10 +20,21 @@ namespace Linn.Common.Service
 
         private readonly ITemplateEngine templateEngine;
 
+        private readonly HtmlNegotiatorOptions options;
+
         public HtmlNegotiator(IViewLoader viewLoader, ITemplateEngine templateEngine)
+            : this(viewLoader, templateEngine, new HtmlNegotiatorOptions())
+        {
+        }
+
+        public HtmlNegotiator(
+            IViewLoader viewLoader,
+            ITemplateEngine templateEngine,
+            HtmlNegotiatorOptions options)
         {
             this.viewLoader = viewLoader;
             this.templateEngine = templateEngine;
+            this.options = options;
         }
 
         public bool CanHandle(MediaTypeHeaderValue accept)
@@ -39,8 +50,14 @@ namespace Linn.Common.Service
 
             var view = this.viewLoader.Load(viewName);
 
+            var appSettings = ApplicationSettings.GetDefaults();
+            foreach (var kvp in this.options.ExtraSettings)
+            {
+                appSettings.Settings[kvp.Key] = kvp.Value;
+            }
+
             var jsonAppSettings = JsonConvert.SerializeObject(
-                ApplicationSettings.Get(),
+                appSettings.Settings,
                 Formatting.Indented,
                 new JsonSerializerSettings
                     {
