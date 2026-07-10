@@ -48,6 +48,13 @@
                         cancellationToken);
                     break;
 
+                case ForbiddenResult<T> r:
+                    res.StatusCode = 403;
+                    await res.WriteAsync(
+                        this.SerializeOptional(r.Message, r.Body),
+                        cancellationToken);
+                    break;
+
                 case NotFoundResult<T> _:
                     res.StatusCode = 404;
                     break;
