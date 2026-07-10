@@ -13,7 +13,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Linn.Common.Configuration" Version="3.0.0" />
-		<ProjectReference Include="..\..\Linn.Common.Facade\src\Linn.Common.Facade.csproj" />
+		<PackageReference Include="Linn.Common.Facade" Version="13.5.0" />
 		<PackageReference Include="Linn.Common.Rendering" Version="1.0.0" />
 		<PackageReference Include="Linn.Common.Reporting.Resources" Version="1.7.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
