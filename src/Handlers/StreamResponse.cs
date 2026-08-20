@@ -7,5 +7,8 @@
         public string ContentType { get; set; }
 
         public string FileName { get; set; }
+
+        // inline (preview, e.g. PDFs) or attachment (force download, e.g. zips)
+        public string Disposition { get; set; } = "inline";
     }
 }

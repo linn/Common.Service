@@ -1,4 +1,8 @@
 # Changelog
+## [3.2.0] - 2026-08-20
+### Changes
+- StreamCopyingResultHandler now handles ForbiddenResult<StreamResponse> (403). Previously a forbidden result fell through to the default case and returned 500.
+- StreamResponse gained a Disposition property (default "inline") so callers can force "attachment" for downloads (e.g. zips) while PDFs and similar keep previewing inline.
 ## [3.0.0] - 2026-05-12
 ### Changes
 - Updated to .NET 10

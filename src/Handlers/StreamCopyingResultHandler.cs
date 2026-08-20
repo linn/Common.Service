@@ -40,9 +40,12 @@
 
                     if (!string.IsNullOrEmpty(success.Data.FileName))
                     {
+                        var disposition = string.IsNullOrEmpty(success.Data.Disposition)
+                            ? "inline"
+                            : success.Data.Disposition;
                         res.Headers["Content-Disposition"] =
-                            $"inline; filename=\"{success.Data.FileName}\"";
-                    }
+                            $"{disposition}; filename=\"{success.Data.FileName}\"";
+                    }   
 
                     res.StatusCode = (int)HttpStatusCode.OK;
 
@@ -70,6 +73,14 @@
                     if (!string.IsNullOrEmpty(unauthorised.Message))
                     {
                         await res.WriteAsync(unauthorised.Message, cancellationToken);
+                    }
+                    break;
+
+                case ForbiddenResult<StreamResponse> forbidden:
+                    res.StatusCode = 403;
+                    if (!string.IsNullOrEmpty(forbidden.Message))
+                    {
+                        await res.WriteAsync(forbidden.Message, cancellationToken);
                     }
                     break;
 
