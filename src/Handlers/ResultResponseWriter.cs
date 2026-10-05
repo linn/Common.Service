@@ -77,8 +77,12 @@
                         cancellationToken);
                     break;
 
-                case ServerFailureResult<T> _:
+                case ServerFailureResult<T> r:
                     res.StatusCode = 500;
+
+                    // e.g. Linn.Common.Facade's "The change was saved, but ... failed" - what a caller needs
+                    // to know not to retry; nothing is written when there's no message
+                    await res.WriteAsync(this.SerializeOptional(NullIfEmpty(r.Message), null), cancellationToken);
                     break;
 
                 default:
@@ -86,6 +90,8 @@
                         $"Unhandled result type {result.GetType().Name}");
             }
         }
+
+        private static string? NullIfEmpty(string? message) => string.IsNullOrEmpty(message) ? null : message;
 
         private string SerializeOptional(object? a, object? b)
         {
