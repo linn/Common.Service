@@ -30,30 +30,28 @@ namespace Linn.Common.Service.Tests
         }
 
         [Test]
-        public async Task ShouldSendItsMessage()
+        public async Task ShouldSendTheUserMessageButNotTheDetail()
         {
-            await this.handler.Handle(
-                this.context.Request,
-                this.context.Response,
-                new ServerFailureResult<WidgetResource>("The change was saved, but writing its log failed"),
-                CancellationToken.None);
+            await this.Write(new ServerFailureResult<WidgetResource>(
+                "The change was saved, but writing its log failed (SqlException: deadlock on log_table)",
+                "The change was saved, but writing its log failed"));
 
             this.context.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             (await this.Body()).Should().Be("\"The change was saved, but writing its log failed\"");
         }
 
         [Test]
-        public async Task ShouldSendNothingWithoutAMessage()
+        public async Task ShouldSendNothingForAnExistingServerFailure()
         {
-            await this.handler.Handle(
-                this.context.Request,
-                this.context.Response,
-                new ServerFailureResult<WidgetResource>(),
-                CancellationToken.None);
+            // a message only - diagnostic, e.g. an upstream service's raw error - stays unsent
+            await this.Write(new ServerFailureResult<WidgetResource>("Unexpected status code 502: upstream stack trace"));
 
             this.context.Response.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
             (await this.Body()).Should().BeEmpty();
         }
+
+        private Task Write(IResult<WidgetResource> result) =>
+            this.handler.Handle(this.context.Request, this.context.Response, result, CancellationToken.None);
 
         private async Task<string> Body()
         {

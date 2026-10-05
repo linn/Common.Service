@@ -1,9 +1,10 @@
 # Changelog
 ## [3.3.0] - 2026-10-05
 ### Changes
-- A `ServerFailureResult` (500) now carries its message in the body, like `BadRequestResult`,
-  `UnauthorisedResult` and `ForbiddenResult` - e.g. Linn.Common.Facade 13.6's "The change was saved, but
-  ... failed", which tells a caller not to simply retry. Still an empty body when there's no message.
+- A `ServerFailureResult` (500) now sends its `UserMessage` (new in Linn.Common.Facade 13.6.0, which this
+  version needs) in the body - text written to be shown, e.g. "The change was saved, but ... failed",
+  which tells a caller not to simply retry. Its `Message` (diagnostic detail) is never sent, so existing
+  `ServerFailureResult`s - which have no `UserMessage` - are still an empty 500.
 ## [3.2.0] - 2026-08-20
 ### Changes
 - StreamCopyingResultHandler now handles ForbiddenResult<StreamResponse> (403). Previously a forbidden result fell through to the default case and returned 500.

@@ -80,9 +80,9 @@
                 case ServerFailureResult<T> r:
                     res.StatusCode = 500;
 
-                    // e.g. Linn.Common.Facade's "The change was saved, but ... failed" - what a caller needs
-                    // to know not to retry; nothing is written when there's no message
-                    await res.WriteAsync(this.SerializeOptional(NullIfEmpty(r.Message), null), cancellationToken);
+                    // only the UserMessage, written to be shown (e.g. Linn.Common.Facade's "The change was
+                    // saved, but ... failed"); Message is diagnostic detail and is never sent
+                    await res.WriteAsync(this.SerializeOptional(NullIfEmpty(r.UserMessage), null), cancellationToken);
                     break;
 
                 default:
