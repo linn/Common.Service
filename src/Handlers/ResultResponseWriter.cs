@@ -59,6 +59,13 @@
                     res.StatusCode = 404;
                     break;
 
+                case ConflictResult<T> r:
+                    res.StatusCode = 409;
+                    await res.WriteAsync(
+                        this.SerializeOptional(r.Message, null),
+                        cancellationToken);
+                    break;
+
                 case CreatedResult<T> r:
                     res.StatusCode = 201;
                    

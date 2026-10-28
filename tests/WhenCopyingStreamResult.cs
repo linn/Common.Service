@@ -86,6 +86,20 @@ namespace Linn.Common.Service.Tests
         }
 
         [Test]
+        public async Task ShouldReturn409ForConflictResult()
+        {
+            var result = new ConflictResult<StreamResponse>("Changed since you opened it");
+
+            await this.handler.Handle(this.context.Request, this.context.Response, result, CancellationToken.None);
+
+            this.context.Response.StatusCode.Should().Be((int)HttpStatusCode.Conflict);
+
+            this.context.Response.Body.Position = 0;
+            using var reader = new StreamReader(this.context.Response.Body);
+            (await reader.ReadToEndAsync()).Should().Be("Changed since you opened it");
+        }
+
+        [Test]
         public async Task ShouldReturn404ForNotFoundResult()
         {
             var result = new NotFoundResult<StreamResponse>("nope");

@@ -88,6 +88,14 @@
                     res.StatusCode = 404;
                     break;
 
+                case ConflictResult<StreamResponse> conflict:
+                    res.StatusCode = 409;
+                    if (!string.IsNullOrEmpty(conflict.Message))
+                    {
+                        await res.WriteAsync(conflict.Message, cancellationToken);
+                    }
+                    break;
+
                 case ServerFailureResult<StreamResponse> _:
                     res.StatusCode = 500;
                     break;
