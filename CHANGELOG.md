@@ -1,4 +1,9 @@
 # Changelog
+## [3.3.0] - 2026-10-28
+### Changes
+- `ConflictResult<T>` (Linn.Common.Facade 13.8.0) is written as a 409 with its message, by the JSON/CSV
+  result handlers and by StreamCopyingResultHandler. Before, the JSON handler threw for it and the
+  stream handler answered 500.
 ## [3.2.0] - 2026-08-20
 ### Changes
 - StreamCopyingResultHandler now handles ForbiddenResult<StreamResponse> (403). Previously a forbidden result fell through to the default case and returned 500.
